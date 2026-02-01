@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHUqEvcE4JeV0xSXMWONg185QZ9IJCuwH0lQ&s">
+    <title>Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f0f0;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            height: 70px;
+            background-color: #000;
+            color: #fff;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-svg {
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover .logo-svg {
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+        }
+
+        .logo-text {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .logo-text::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            z-index: -1;
+        }
+
+        .exclamation {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            flex: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            position: relative;
+            margin: 0 1rem;
+        }
+
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 250px;
+            background-color: rgba(51, 51, 51, 0.85);
+            backdrop-filter: blur(5px);
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+            padding: 0.5rem 0;
+        }
+
+        .profile-dropdown {
+            right: 0;
+            left: auto;
+            width: 200px;
+            background-color: rgba(51, 51, 51, 0.85);
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 0.7rem 1rem;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .profile {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .profile-icon:hover {
+            background-color: #777;
+        }
+        
+        .profile:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        /* Original Profile Page Styles */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        
+        .profile-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 60px;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            display: block;
+            background-color: #ddd;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-pic-placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            font-size: 50px;
+            color: #999;
+        }
+        
+        .upload-btn {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+            padding: 5px 0;
+            font-size: 12px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .profile-pic:hover .upload-btn {
+            opacity: 1;
+        }
+        
+        .profile-name {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .profile-username {
+            color: #767676;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .form-section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #efefef;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        input[type="tel"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="date"]:focus,
+        input[type="tel"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #e60023;
+            outline: none;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .interest-tag {
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .interest-tag:hover {
+            background-color: #e60023;
+            color: white;
+        }
+        
+        .interest-tag.selected {
+            background-color: #e60023;
+            color: white;
+        }
+        
+        .btn-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: #e60023;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #d50c22;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid #e60023;
+            color: #e60023;
+        }
+        
+        .btn-outline:hover {
+            background-color: #e60023;
+            color: white;
+        }
+        
+        /* Login Form Styles (for logout functionality) */
+        .login-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        
+        .login-form {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .login-form h2 {
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: #333;
+        }
+        
+        .form-footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .form-footer a {
+            color: #000;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Added Navigation Bar -->
+    <nav class="navbar">
+        <!-- Logo -->
+        <a href="homehtml.html" class="logo">
+            <div class="logo-container">
+                <!-- Custom SVG Symbol -->
+                <svg class="logo-svg" width="45" height="45" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Outer circle -->
+                    <circle cx="50" cy="50" r="40" stroke="white" stroke-width="4" fill="none"/>
+                    
+                    <!-- Camera lens inner circle -->
+                    <circle cx="50" cy="50" r="25" stroke="white" stroke-width="3" fill="rgba(255,255,255,0.1)"/>
+                    
+                    <!-- Camera flash -->
+                    <rect x="35" y="20" width="8" height="8" rx="2" fill="white"/>
+                    
+                    <!-- Shutter lines -->
+                    <path d="M35 50 L50 35 L65 50 L50 65 Z" stroke="white" stroke-width="2" fill="none"/>
+                    
+                    <!-- Center dot -->
+                    <circle cx="50" cy="50" r="4" fill="white"/>
+                    
+    
+                    <path d="M20 30 Q25 25 30 30" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M70 30 Q75 25 80 30" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M20 70 Q25 75 30 70" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M70 70 Q75 75 80 70" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                
+                <span class="logo-text">STYLE<span class="exclamation">!</span>SNAP</span>
+            </div>
+        </a>
+
+        <!-- Nav Links -->
+        <ul class="nav-links">
+            <li class="nav-item">
+                <a href="homehtml.html" class="nav-link">Home</a>
+            </li>
+            <li class="nav-item">
+                <a href="collectionshtml.html" class="nav-link">Collections</a>
+                <div class="dropdown">
+                    <a href="trending1.html" class="dropdown-item">Trending</a>
+                    <a href="food1.html" class="dropdown-item">Food & Recipes</a>
+                    <a href="fashion1.html" class="dropdown-item">Fashion & Style</a>
+                    <a href="homedecor1.html" class="dropdown-item">Home Decor & Interior Design</a>
+                    <a href="art1.html" class="dropdown-item">Art & Creativity</a>
+                    <a href="technology1.html" class="dropdown-item">Technology & Gadgets</a>
+                    <a href="fitness1.html" class="dropdown-item">Fitness & Wellness</a>
+                    <a href="diy1.html" class="dropdown-item">DIY & Crafts</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="explorehtml.html" class="nav-link">Explore</a>
+                <div class="dropdown">
+                    <a href="africa.html" class="dropdown-item">Africa</a>
+                    <a href="asia.html" class="dropdown-item">Asia</a>
+                    <a href="europe.html" class="dropdown-item">Europe</a>
+                    <a href="north.html" class="dropdown-item">North America</a>
+                    <a href="south.html" class="dropdown-item">South America</a>
+                    <a href="australia.html" class="dropdown-item">Australia & Oceania</a>
+                    <a href="antarctica.html" class="dropdown-item">Antarctica</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="favourites.html" class="nav-link">Favourites</a>
+            </li>
+        </ul>
+
+        <!-- Profile -->
+        <div class="profile">
+            <div class="profile-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+            <div class="dropdown profile-dropdown">
+                <a href="profile.html" class="dropdown-item">Profile</a>
+                
+                <a href="#" class="dropdown-item" id="logout-btn">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Container (for logout functionality) -->
+    <div class="login-container" id="login-container">
+        <div class="login-form">
+            <h2>Login to continue</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Log In</button>
+            </form>
+            <div class="form-footer">
+                <p>Don't have an account? <a href="#" id="signup-link">Sign up</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Original Profile Content -->
+    <div class="container">
+        <div class="profile-header">
+            <div class="profile-pic">
+                <div class="profile-pic-placeholder">👤</div>
+                <div class="upload-btn">Upload Photo</div>
+                <input type="file" id="profile-upload" style="display: none;">
+            </div>
+            <h1 class="profile-name">Your Name</h1>
+            <div class="profile-username">@username</div>
+        </div>
+
+        <form id="profile-form">
+            <div class="form-section">
+                <h2 class="section-title">Basic Information</h2>
+                <div class="form-group">
+                    <label for="fullname">Full Name</label>
+                    <input type="text" id="fullname" name="fullname" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Choose a username">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email-profile" name="email" placeholder="Your email address">
+                </div>
+                <div class="form-group">
+                    <label for="birthday">Birthday</label>
+                    <input type="date" id="birthday" name="birthday">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Your phone number">
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">About You</h2>
+                <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <textarea id="bio" name="bio" placeholder="Tell us about yourself..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location" placeholder="City, Country">
+                </div>
+                <div class="form-group">
+                    <label for="website">Website</label>
+                    <input type="text" id="website" name="website" placeholder="https://yourwebsite.com">
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">Interests</h2>
+                <p>Select topics you're interested in:</p>
+                <div class="interests">
+                    <div class="interest-tag" data-interest="art">Art</div>
+                    <div class="interest-tag" data-interest="photography">Photography</div>
+                    <div class="interest-tag" data-interest="food">Food & Drink</div>
+                    <div class="interest-tag" data-interest="travel">Travel</div>
+                    <div class="interest-tag" data-interest="fashion">Fashion</div>
+                    <div class="interest-tag" data-interest="home">Home Decor</div>
+                    <div class="interest-tag" data-interest="diy">DIY & Crafts</div>
+                    <div class="interest-tag" data-interest="fitness">Fitness</div>
+                    <div class="interest-tag" data-interest="tech">Technology</div>
+                    <div class="interest-tag" data-interest="beauty">Beauty</div>
+                    <div class="interest-tag" data-interest="nature">Nature</div>
+                    <div class="interest-tag" data-interest="design">Design</div>
+                </div>
+                <input type="hidden" id="selected-interests" name="interests">
+            </div>
+
+            <div class="btn-section">
+                <button type="button" class="btn btn-outline" id="cancel-btn">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="save-btn">Save Profile</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Handle profile picture upload
+        document.querySelector('.profile-pic').addEventListener('click', function() {
+            document.getElementById('profile-upload').click();
+        });
+
+        document.getElementById('profile-upload').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const placeholder = document.querySelector('.profile-pic-placeholder');
+                    if (placeholder) {
+                        placeholder.remove();
+                    }
+                    
+                    // Check if img already exists
+                    let img = document.querySelector('.profile-pic img');
+                    if (!img) {
+                        img = document.createElement('img');
+                        document.querySelector('.profile-pic').prepend(img);
+                    }
+                    
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Handle interest tags selection
+        const interestTags = document.querySelectorAll('.interest-tag');
+        const selectedInterests = [];
+
+        interestTags.forEach(tag => {
+            tag.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const interest = this.getAttribute('data-interest');
+                
+                if (this.classList.contains('selected')) {
+                    if (!selectedInterests.includes(interest)) {
+                        selectedInterests.push(interest);
+                    }
+                } else {
+                    const index = selectedInterests.indexOf(interest);
+                    if (index > -1) {
+                        selectedInterests.splice(index, 1);
+                    }
+                }
+                
+                document.getElementById('selected-interests').value = JSON.stringify(selectedInterests);
+            });
+        });
+
+        // Handle form submission
+        document.getElementById('profile-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const profileData = {};
+            
+            for (const [key, value] of formData.entries()) {
+                profileData[key] = value;
+            }
+            
+            // Parse interests
+            if (profileData.interests) {
+                profileData.interests = JSON.parse(profileData.interests);
+            }
+            
+            // Update UI with saved data
+            updateProfileDisplay(profileData);
+            
+            alert('Profile saved successfully! (Note: Information will be lost if page is refreshed)');
+        });
+
+        // Update profile display with saved data
+        function updateProfileDisplay(data) {
+            if (data.fullname) {
+                document.querySelector('.profile-name').textContent = data.fullname;
+            }
+            
+            if (data.username) {
+                document.querySelector('.profile-username').textContent = '@' + data.username;
+            }
+        }
+
+        // Cancel button functionality
+        document.getElementById('cancel-btn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
+                window.location.href = 'homehtml.html';
+            }
+        });
+
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // You would typically do these steps in a real app:
+            // 1. Clear any authentication tokens or cookies
+            // localStorage.removeItem('authToken');
+            // 2. Make a logout API call if needed
+            
+            // For this demo, we'll just show the login form
+            document.getElementById('login-container').style.display = 'flex';
+        });
+        
+        // Handle login form submission
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // In a real app, you would validate credentials here
+            // For this demo, we'll just hide the login form
+            document.getElementById('login-container').style.display = 'none';
+            
+            // Redirect to home
+            window.location.href = 'homehtml.html';
+        });
+        
+        // Toggle to signup form
+        document.getElementById('signup-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Sign up functionality would be implemented here');
+        });
+    </script>
+</body>
+</html>

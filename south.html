@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHUqEvcE4JeV0xSXMWONg185QZ9IJCuwH0lQ&s">
+    <title>Explore</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            height: 70px;
+            background-color: #000;
+            color: #fff;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-svg {
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover .logo-svg {
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+        }
+
+        .logo-text {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .logo-text::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            z-index: -1;
+        }
+
+        .exclamation {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            flex: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            position: relative;
+            margin: 0 1rem;
+        }
+
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 250px;
+            background-color: rgba(51, 51, 51, 0.85);
+            backdrop-filter: blur(5px);
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+            padding: 0.5rem 0;
+        }
+
+        .profile-dropdown {
+            right: 0;
+            left: auto;
+            width: 200px;
+            background-color: rgba(51, 51, 51, 0.85);
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 0.7rem 1rem;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .profile {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .profile-icon:hover {
+            background-color: #777;
+        }
+        
+        .profile:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Pinterest Grid Styles */
+        .container {
+            width: 95%;
+            margin: 2rem auto;
+        }
+
+        .pinterest-grid {
+            column-count: 5;
+            column-gap: 16px;
+            width: 100%;
+        }
+
+        @media (max-width: 1200px) {
+            .pinterest-grid {
+                column-count: 4;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .pinterest-grid {
+                column-count: 3;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .pinterest-grid {
+                column-count: 2;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .pinterest-grid {
+                column-count: 1;
+            }
+        }
+
+        .pin {
+            break-inside: avoid;
+            margin-bottom: 16px;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: #fff;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .pin:hover {
+            transform: translateY(-5px);
+        }
+
+        .pin-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            cursor: pointer;
+        }
+
+        .pin-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.5) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 16px;
+        }
+
+        .pin:hover .pin-overlay {
+            opacity: 1;
+        }
+
+        .pin-actions {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .pin:hover .pin-actions {
+            opacity: 1;
+        }
+
+        .pin-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .like-btn {
+            color: #666;
+            position: relative;
+        }
+
+        .like-btn.active {
+            color: #e60023;
+        }
+
+        .like-btn.active svg {
+            fill: #e60023;
+        }
+
+        .like-btn svg {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .like-btn.animating svg {
+            transform: scale(1.5);
+        }
+
+        .save-btn {
+            color: #333;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 8px 16px;
+            border-radius: 18px;
+            font-weight: bold;
+            width: auto;
+            height: 36px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .save-btn.saved {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .save-btn:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        .save-btn.saved:hover {
+            background-color: #333;
+        }
+
+        /* Animation for the heart effect */
+        @keyframes heartPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(1); }
+        }
+
+        .heart-pop {
+            animation: heartPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(51, 51, 51, 0.9);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <!-- Logo -->
+        <a href="homehtml.html" class="logo">
+            <div class="logo-container">
+                <!-- Custom SVG Symbol -->
+                <svg class="logo-svg" width="45" height="45" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Outer circle -->
+                    <circle cx="50" cy="50" r="40" stroke="white" stroke-width="4" fill="none"/>
+                    
+                    <!-- Camera lens inner circle -->
+                    <circle cx="50" cy="50" r="25" stroke="white" stroke-width="3" fill="rgba(255,255,255,0.1)"/>
+                    
+                    <!-- Camera flash -->
+                    <rect x="35" y="20" width="8" height="8" rx="2" fill="white"/>
+                    
+                    <!-- Shutter lines -->
+                    <path d="M35 50 L50 35 L65 50 L50 65 Z" stroke="white" stroke-width="2" fill="none"/>
+                    
+                    <!-- Center dot -->
+                    <circle cx="50" cy="50" r="4" fill="white"/>
+                    
+    
+                    <path d="M20 30 Q25 25 30 30" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M70 30 Q75 25 80 30" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M20 70 Q25 75 30 70" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M70 70 Q75 75 80 70" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                
+                <span class="logo-text">STYLE<span class="exclamation">!</span>SNAP</span>
+            </div>
+        </a>
+
+        <!-- Nav Links -->
+        <ul class="nav-links">
+            <li class="nav-item">
+                <a href="homehtml.html" class="nav-link">Home</a>
+            </li>
+            <li class="nav-item">
+                <a href="collectionshtml.html" class="nav-link">Collections</a>
+                <div class="dropdown">
+                    <a href="trending1.html" class="dropdown-item">Trending</a>
+                    <a href="food1.html" class="dropdown-item">Food & Recipes</a>
+                    <a href="fashion1.html" class="dropdown-item">Fashion & Style</a>
+                    <a href="homedecor1.html" class="dropdown-item">Home Decor & Interior Design</a>
+                    <a href="art1.html" class="dropdown-item">Art & Creativity</a>
+                    <a href="technology1.html" class="dropdown-item">Technology & Gadgets</a>
+                    <a href="fitness1.html" class="dropdown-item">Fitness & Wellness</a>
+                    <a href="diy1.html" class="dropdown-item">DIY & Crafts</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="explorehtml.html" class="nav-link">Explore</a>
+                <div class="dropdown">
+                    <a href="africa.html" class="dropdown-item">Africa</a>
+                    <a href="asia.html" class="dropdown-item">Asia</a>
+                    <a href="europe.html" class="dropdown-item">Europe</a>
+                    <a href="north.html" class="dropdown-item">North America</a>
+                    <a href="south.html" class="dropdown-item">South America</a>
+                    <a href="australia.html" class="dropdown-item">Australia & Oceania</a>
+                    <a href="antarctica.html" class="dropdown-item">Antarctica</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="favourites.html" class="nav-link">Favourites</a>
+            </li>
+        </ul>
+
+        <!-- Profile -->
+        <div class="profile">
+            <div class="profile-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+            <div class="dropdown profile-dropdown">
+                <a href="profile.html" class="dropdown-item">Profile</a>
+                
+                <a href="logout.html" class="dropdown-item">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Item saved to favourites</div>
+
+    <!-- Pinterest Grid Container -->
+    <div class="container">
+        <div class="pinterest-grid" id="pinterest-grid">
+            <!-- Pins will be generated here by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Sample data for 50 pins - only image URLs
+        const pinsData = [
+            "https://plus.unsplash.com/premium_photo-1712285596706-ef85ed801a39?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8c291dGglMjBhbWVyaWNhfGVufDB8fDB8fHww",
+"https://images.unsplash.com/photo-1563126171-fa019bbbfa18?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c291dGglMjBhbWVyaWNhfGVufDB8fDB8fHww",
+"https://images.unsplash.com/photo-1580619305218-8423a7ef79b4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c291dGglMjBhbWVyaWNhfGVufDB8fDB8fHww",
+"https://plus.unsplash.com/premium_photo-1686507182176-7c32d2e8088b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8c291dGglMjBhbWVyaWNhfGVufDB8fDB8fHww",
+"https://images.unsplash.com/photo-1619546952812-520e98064a52?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c291dGglMjBhbWVyaWNhfGVufDB8fDB8fHww",
+"https://images.unsplash.com/photo-1543385426-191664295b58?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c291dGglMjBhbWVyaWNhfGVufDB8fDB8fHww",
+"https://images.unsplash.com/photo-1473455811944-fdd1b0f282f3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1545330785-15356daae141?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c291dGglMjBhbWVyaWNhfGVufDB8fDB8fHww",
+"https://plus.unsplash.com/premium_photo-1697729955700-6004e5402a74?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8c291dGglMjBhbWVyaWNhfGVufDB8fDB8fHww",
+"https://images.unsplash.com/photo-1629537745251-57c3bc5b8670?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1560262324-865100c6194c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1567597243073-2d274aabecec?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1571422657325-63704f9273ea?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1650441909257-9190e9c75b43?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1619911389340-2a010118b3fd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1582218290380-ae58573670e3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1576475510454-b0af18970e6d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjR8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1593692557859-b209f9f4ced4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjJ8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1602591620189-de34d60650b2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjd8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1625398244649-abc29446b6c6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://plus.unsplash.com/premium_photo-1694475526398-41633c1675cf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzN8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1580656739452-3bf6d7545685?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzR8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1627509312281-226155256088?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzV8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1692176048915-b4bbc02ee4ff?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDR8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://plus.unsplash.com/premium_photo-1687428554753-2ba702e2684f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDV8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1682314674311-5b183908ceb7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDN8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://plus.unsplash.com/premium_photo-1687428554408-cab59bd09364?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDl8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1658874285867-2bec01fc1ef4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTJ8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://plus.unsplash.com/premium_photo-1664304337966-4c241cf4d475?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTN8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://plus.unsplash.com/premium_photo-1694475616634-2102bc058bd3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTd8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1685110485605-aecb3e4892df?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjZ8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://plus.unsplash.com/premium_photo-1694475620405-0368b0a5e971?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Njl8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://plus.unsplash.com/premium_photo-1694475525406-98d0b095ccb1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzN8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://plus.unsplash.com/premium_photo-1733266845134-c6595134bcd8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nzd8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://plus.unsplash.com/premium_photo-1694475506662-2e35d0765066?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODF8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1626368185783-7c928d6f0133?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODN8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1719244376100-4b342f665d07?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODJ8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1719244376930-7c0a1b358b7a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODd8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1706201288945-b368a9d79fab?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODh8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1698047663555-9599c9ac3c20?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTB8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1649665799602-1ba1a7f77a7b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTJ8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1586857295317-e17f9d7aac01?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTV8fHNvdXRoJTIwYW1lcmljYXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1504988057673-04011b0b45c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTA3fHxzb3V0aCUyMGFtZXJpY2F8ZW58MHx8MHx8fDA%3D",
+"https://images.unsplash.com/photo-1590647298330-3f8bb57bece5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTA4fHxzb3V0aCUyMGFtZXJpY2F8ZW58MHx8MHx8fDA%3D",
+"https://plus.unsplash.com/premium_photo-1733317216216-1bf7b1db4f65?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTA1fHxzb3V0aCUyMGFtZXJpY2F8ZW58MHx8MHx8fDA%3D",
+"https://plus.unsplash.com/premium_photo-1733342580487-67a5843a2554?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTA5fHxzb3V0aCUyMGFtZXJpY2F8ZW58MHx8MHx8fDA%3D",
+"https://images.unsplash.com/photo-1665594051407-7385d281ad76?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTEyfHxzb3V0aCUyMGFtZXJpY2F8ZW58MHx8MHx8fDA%3D",
+"https://images.unsplash.com/photo-1502219778817-93d41333bd19?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTI2fHxzb3V0aCUyMGFtZXJpY2F8ZW58MHx8MHx8fDA%3D",
+"https://images.unsplash.com/photo-1656064989407-e302d0b18fcb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTI4fHxzb3V0aCUyMGFtZXJpY2F8ZW58MHx8MHx8fDA%3D",
+"https://images.unsplash.com/photo-1610562624885-c09fed45cb07?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTM1fHxzb3V0aCUyMGFtZXJpY2F8ZW58MHx8MHx8fDA%3D",
+            
+        ];
+
+        // Function to create pins from data
+        function createPinsGrid() {
+            const grid = document.getElementById('pinterest-grid');
+            
+            pinsData.forEach((imageUrl, index) => {
+                // Create pin container
+                const pinElement = document.createElement('div');
+                pinElement.className = 'pin';
+                pinElement.dataset.id = index + 1;
+                
+                // Create image container
+                const imageContainer = document.createElement('div');
+                imageContainer.style.position = 'relative';
+                
+                // Create image
+                const image = document.createElement('img');
+                image.className = 'pin-image';
+                image.src = imageUrl;
+                image.alt = 'Pin image';
+                
+                // Create overlay
+                const overlay = document.createElement('div');
+                overlay.className = 'pin-overlay';
+                
+                // Create actions div
+                const actions = document.createElement('div');
+                actions.className = 'pin-actions';
+                
+                // Create like button
+                const likeBtn = document.createElement('button');
+                likeBtn.className = 'pin-btn like-btn';
+                likeBtn.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                `;
+                
+                // Create save button
+                const saveBtn = document.createElement('button');
+                saveBtn.className = 'pin-btn save-btn';
+                saveBtn.textContent = 'Save';
+                
+                // Append buttons to actions
+                actions.appendChild(likeBtn);
+                actions.appendChild(saveBtn);
+                
+                // Append image, overlay, and actions to container
+                imageContainer.appendChild(image);
+                imageContainer.appendChild(overlay);
+                imageContainer.appendChild(actions);
+                
+                // Append image container to pin
+                pinElement.appendChild(imageContainer);
+                
+                // Append pin to grid
+                grid.appendChild(pinElement);
+                
+                // Add event listeners
+                likeBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    toggleLike(this, index + 1);
+                });
+                
+                saveBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    toggleSave(this, { id: index + 1, imageUrl: imageUrl });
+                });
+            });
+        }
+
+        // Function to toggle like state
+        function toggleLike(button, pinId) {
+            button.classList.toggle('active');
+            
+            if (button.classList.contains('active')) {
+                button.classList.add('animating');
+                setTimeout(() => {
+                    button.classList.remove('animating');
+                }, 500);
+            }
+        }
+
+        // Function to toggle save state and save to localStorage
+        function toggleSave(button, pin) {
+            button.classList.toggle('saved');
+            
+            if (button.classList.contains('saved')) {
+                button.textContent = 'Saved';
+                savePinToFavorites(pin);
+                showToast('Item saved to favourites');
+            } else {
+                button.textContent = 'Save';
+                removePinFromFavorites(pin.id);
+                showToast('Item removed from favourites');
+            }
+        }
+
+        // Function to save pin to localStorage
+        function savePinToFavorites(pin) {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            
+            // Check if pin already exists in favorites
+            const exists = favorites.some(fav => fav.id === pin.id);
+            
+            if (!exists) {
+                favorites.push(pin);
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+            }
+        }
+
+        // Function to remove pin from localStorage
+        function removePinFromFavorites(pinId) {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            favorites = favorites.filter(pin => pin.id !== pinId);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+
+        // Function to show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // Check for saved pins on page load
+        function checkSavedPins() {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            
+            if (favorites.length > 0) {
+                const pins = document.querySelectorAll('.pin');
+                
+                pins.forEach(pin => {
+                    const pinId = parseInt(pin.dataset.id);
+                    const isSaved = favorites.some(fav => fav.id === pinId);
+                    
+                    if (isSaved) {
+                        const saveBtn = pin.querySelector('.save-btn');
+                        saveBtn.classList.add('saved');
+                        saveBtn.textContent = 'Saved';
+                    }
+                });
+            }
+        }
+
+        // Initialize the grid
+        document.addEventListener('DOMContentLoaded', () => {
+            createPinsGrid();
+            checkSavedPins();
+        });
+    </script>
+</body>
+</html>

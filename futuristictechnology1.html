@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHUqEvcE4JeV0xSXMWONg185QZ9IJCuwH0lQ&s">
+    <title>Collections</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            height: 70px;
+            background-color: #000;
+            color: #fff;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-svg {
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover .logo-svg {
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+        }
+
+        .logo-text {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .logo-text::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            z-index: -1;
+        }
+
+        .exclamation {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            flex: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            position: relative;
+            margin: 0 1rem;
+        }
+
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 250px;
+            background-color: rgba(51, 51, 51, 0.85);
+            backdrop-filter: blur(5px);
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+            padding: 0.5rem 0;
+        }
+
+        .profile-dropdown {
+            right: 0;
+            left: auto;
+            width: 200px;
+            background-color: rgba(51, 51, 51, 0.85);
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 0.7rem 1rem;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .profile {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .profile-icon:hover {
+            background-color: #777;
+        }
+        
+        .profile:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Pinterest Grid Styles */
+        .container {
+            width: 95%;
+            margin: 2rem auto;
+        }
+
+        .pinterest-grid {
+            column-count: 5;
+            column-gap: 16px;
+            width: 100%;
+        }
+
+        @media (max-width: 1200px) {
+            .pinterest-grid {
+                column-count: 4;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .pinterest-grid {
+                column-count: 3;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .pinterest-grid {
+                column-count: 2;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .pinterest-grid {
+                column-count: 1;
+            }
+        }
+
+        .pin {
+            break-inside: avoid;
+            margin-bottom: 16px;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: #fff;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .pin:hover {
+            transform: translateY(-5px);
+        }
+
+        .pin-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            cursor: pointer;
+        }
+
+        .pin-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.5) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 16px;
+        }
+
+        .pin:hover .pin-overlay {
+            opacity: 1;
+        }
+
+        .pin-actions {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .pin:hover .pin-actions {
+            opacity: 1;
+        }
+
+        .pin-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .like-btn {
+            color: #666;
+            position: relative;
+        }
+
+        .like-btn.active {
+            color: #e60023;
+        }
+
+        .like-btn.active svg {
+            fill: #e60023;
+        }
+
+        .like-btn svg {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .like-btn.animating svg {
+            transform: scale(1.5);
+        }
+
+        .save-btn {
+            color: #333;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 8px 16px;
+            border-radius: 18px;
+            font-weight: bold;
+            width: auto;
+            height: 36px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .save-btn.saved {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .save-btn:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        .save-btn.saved:hover {
+            background-color: #333;
+        }
+
+        /* Animation for the heart effect */
+        @keyframes heartPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(1); }
+        }
+
+        .heart-pop {
+            animation: heartPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(51, 51, 51, 0.9);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <!-- Logo -->
+        <a href="homehtml.html" class="logo">
+            <div class="logo-container">
+                <!-- Custom SVG Symbol -->
+                <svg class="logo-svg" width="45" height="45" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Outer circle -->
+                    <circle cx="50" cy="50" r="40" stroke="white" stroke-width="4" fill="none"/>
+                    
+                    <!-- Camera lens inner circle -->
+                    <circle cx="50" cy="50" r="25" stroke="white" stroke-width="3" fill="rgba(255,255,255,0.1)"/>
+                    
+                    <!-- Camera flash -->
+                    <rect x="35" y="20" width="8" height="8" rx="2" fill="white"/>
+                    
+                    <!-- Shutter lines -->
+                    <path d="M35 50 L50 35 L65 50 L50 65 Z" stroke="white" stroke-width="2" fill="none"/>
+                    
+                    <!-- Center dot -->
+                    <circle cx="50" cy="50" r="4" fill="white"/>
+                    
+    
+                    <path d="M20 30 Q25 25 30 30" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M70 30 Q75 25 80 30" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M20 70 Q25 75 30 70" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M70 70 Q75 75 80 70" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                
+                <span class="logo-text">STYLE<span class="exclamation">!</span>SNAP</span>
+            </div>
+        </a>
+
+        <!-- Nav Links -->
+        <ul class="nav-links">
+            <li class="nav-item">
+                <a href="homehtml.html" class="nav-link">Home</a>
+            </li>
+            <li class="nav-item">
+                <a href="collectionshtml.html" class="nav-link">Collections</a>
+                <div class="dropdown">
+                    <a href="trending1.html" class="dropdown-item">Trending</a>
+                    <a href="food1.html" class="dropdown-item">Food & Recipes</a>
+                    <a href="fashion1.html" class="dropdown-item">Fashion & Style</a>
+                    <a href="homedecor1.html" class="dropdown-item">Home Decor & Interior Design</a>
+                    <a href="art1.html" class="dropdown-item">Art & Creativity</a>
+                    <a href="technology1.html" class="dropdown-item">Technology & Gadgets</a>
+                    <a href="fitness1.html" class="dropdown-item">Fitness & Wellness</a>
+                    <a href="diy1.html" class="dropdown-item">DIY & Crafts</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="explorehtml.html" class="nav-link">Explore</a>
+                <div class="dropdown">
+                    <a href="africa.html" class="dropdown-item">Africa</a>
+                    <a href="asia.html" class="dropdown-item">Asia</a>
+                    <a href="europe.html" class="dropdown-item">Europe</a>
+                    <a href="north.html" class="dropdown-item">North America</a>
+                    <a href="south.html" class="dropdown-item">South America</a>
+                    <a href="australia.html" class="dropdown-item">Australia & Oceania</a>
+                    <a href="antarctica.html" class="dropdown-item">Antarctica</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="favourites.html" class="nav-link">Favourites</a>
+            </li>
+        </ul>
+
+        <!-- Profile -->
+        <div class="profile">
+            <div class="profile-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+            <div class="dropdown profile-dropdown">
+                <a href="profile.html" class="dropdown-item">Profile</a>
+                
+                <a href="logout.html" class="dropdown-item">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Item saved to favourites</div>
+
+    <!-- Pinterest Grid Container -->
+    <div class="container">
+        <div class="pinterest-grid" id="pinterest-grid">
+            <!-- Pins will be generated here by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Sample data for 50 pins - only image URLs
+        const pinsData = [
+        "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8RnV0dXJpc3RpYyUyMFRlY2hub2xvZ3l8ZW58MHx8MHx8fDA%3D",
+"https://images.unsplash.com/photo-1485740112426-0c2549fa8c86?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8RnV0dXJpc3RpYyUyMFRlY2hub2xvZ3l8ZW58MHx8MHx8fDA%3D",
+"https://plus.unsplash.com/premium_photo-1678937611279-09b65beca8e1?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fEZ1dHVyaXN0aWMlMjBUZWNobm9sb2d5fGVufDB8fDB8fHww",
+"https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fEZ1dHVyaXN0aWMlMjBUZWNobm9sb2d5fGVufDB8fDB8fHww",
+"https://images.unsplash.com/photo-1720962158903-191e054846d1?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fEZ1dHVyaXN0aWMlMjBUZWNobm9sb2d5fGVufDB8fDB8fHww",
+"https://images.unsplash.com/photo-1720962158937-7ea890052166?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fEZ1dHVyaXN0aWMlMjBUZWNobm9sb2d5fGVufDB8fDB8fHww",
+"https://plus.unsplash.com/premium_photo-1682437760246-ae6053423fbe?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fEZ1dHVyaXN0aWMlMjBUZWNobm9sb2d5fGVufDB8fDB8fHww",
+"https://media.istockphoto.com/id/876848746/photo/business-network.webp?a=1&b=1&s=612x612&w=0&k=20&c=3e0werzr8xHYmnBpqrREy_VAjWQvkRH15E3VkyT3b4M=",
+"https://media.istockphoto.com/id/1271697775/photo/digital-transformation-concept-binary-code-ai.webp?a=1&b=1&s=612x612&w=0&k=20&c=zuGa5rVCPicj33eOsrNuugZHXc3EaYKGwBUu_f5lYCs=",
+"https://media.istockphoto.com/id/1180225153/photo/hes-working-on-some-brand-new-code.jpg?s=612x612&w=0&k=20&c=gyGCP12a0DE2XK--shYC0miWoAQToitmOIRFQCJL4VA=",
+"https://media.istockphoto.com/id/1324380506/photo/people-with-vr-grasses-playing-virtual-reality-game-future-digital-technology-and-3d-virtual.webp?a=1&b=1&s=612x612&w=0&k=20&c=i8vHSeffMXOknM1iu8QDnSEDuNg0nOoLjJvP-KjdRoE=",
+"https://images.unsplash.com/photo-1580584126903-c17d41830450?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fEZ1dHVyaXN0aWMlMjBUZWNobm9sb2d5fGVufDB8fDB8fHww",
+"https://media.istockphoto.com/id/1212911887/photo/futuristic-digital-block-chain-background.jpg?s=612x612&w=0&k=20&c=tqxa6bZg8XBo_J6h2waJrBZ2UdTeEtzOlRUcM9sDkMc=",
+"https://media.istockphoto.com/id/1368757790/photo/biosensor-technology-concepts-new-experiences-with-metaverse-web3-and-blockchain-hand.jpg?s=612x612&w=0&k=20&c=KRGset8yE0kDOHmAeruiKMTVEhuU5nLUMRw4HFWbIRQ=",
+"https://media.istockphoto.com/id/1206796363/photo/ai-machine-learning-hands-of-robot-and-human-touching-on-big-data-network-connection.jpg?s=612x612&w=0&k=20&c=xIX5Bz7h50B83cCZG_gXkyZSOu-mG93DtOcNK7RNEAo=",
+"https://media.istockphoto.com/id/1332953647/photo/asian-chinese-mid-adult-female-astronaut-looking-at-earth-through-window-from-spaceship-at.jpg?s=612x612&w=0&k=20&c=4Yh6cjHO4mENUfjOHQBfBBt41tXP5x4nFqZiOyTkeJg=",
+"https://media.istockphoto.com/id/1150197773/photo/manager-technical-industrial-engineer-working-and-control-robotics-with-monitoring-system.jpg?s=612x612&w=0&k=20&c=7G9nL5DU7zaPWzIyyvR5gTnxaN5kiQklggKZgxhlaVU=",
+"https://media.istockphoto.com/id/1179441194/photo/futuristic-generic-concept-sport-car-speeding-on-city-highway.jpg?s=612x612&w=0&k=20&c=JAamQlgLytPemmPL9XI6kSxo1eEjNEh_J7L0oz5p74E=",
+"https://media.istockphoto.com/id/1166272744/photo/futuristic-digital-technology-screen-on-the-eye.jpg?s=612x612&w=0&k=20&c=EMglh3Qt9oBLneLtfV3VYLm6QYUlAlu4Ac7xzUpOrOk=",
+"https://media.istockphoto.com/id/938057542/photo/factory-chief-engineer-wearing-vr-headset-designs-engine-turbine-on-the-holographic-projection.jpg?s=612x612&w=0&k=20&c=jqS3LO7xHjBX0xR7BHxP4bCHalbrQR0ui_iKYLtvAEk=",
+"https://media.istockphoto.com/id/971401274/photo/in-the-near-future-male-and-female-computer-engineers-talk-while-working-on-the-transparent.jpg?s=612x612&w=0&k=20&c=jVf5zrdjF89tF-hJBv_NN9sdFf98ni5t_m0tBKKvAZs=",
+"https://media.istockphoto.com/id/1173740436/photo/modern-high-tech-authentic-robot-arm-holding-contemporary-super-computer-processor-industrial.jpg?s=612x612&w=0&k=20&c=aBioTrTb3FtJv0xXceWblJ-KW2oEPi3Csh3reWdkMQE=",
+"https://media.istockphoto.com/id/1051669866/photo/businessman-touching-tablet-and-laptop-managing-global-structure-networking-and-data.jpg?s=612x612&w=0&k=20&c=AUY-zJISrXctB4RayF6Sya8pJn16q23TY2dOQNQYHCI=",
+"https://media.istockphoto.com/id/1400218353/photo/green-technology-environmental-technology-concept-sustainable-development-goals-sdgs.jpg?s=612x612&w=0&k=20&c=xdD0sXbA9GHytb9TV8Q_1Wg560aZTY2JaICZx-mEVoc=",
+"https://media.istockphoto.com/id/2206837552/photo/an-inspiring-educational-environment-filled-with-robotic-arms-coding-workstations-and-ai.jpg?s=612x612&w=0&k=20&c=yuAkQKUugL3nRxkX67MEMWXGSlBMBiMKcT7jobIeoqQ=",
+"https://media.istockphoto.com/id/1148091792/photo/technology-abstract.jpg?s=612x612&w=0&k=20&c=eYFiD5H90e_MJQB9brWFzSqBVd-oNYx0zqYTIuwwS_Q=",
+"https://media.istockphoto.com/id/614736586/photo/father-and-son-using-virtual-reality-glasses-sitting-outside.jpg?s=612x612&w=0&k=20&c=PLx3KMJygCjKvlT1OcBry9Q7rQqV6H3JQmNILkTSb9o=",
+"https://media.istockphoto.com/id/1306713348/photo/drone-in-soybean-crop.jpg?s=612x612&w=0&k=20&c=D-3Qud3HszLdfg_Q4mB9TQRetM1W3S-aIZwKHQd3DTg=",
+"https://media.istockphoto.com/id/1171902434/photo/smart-industry-control-concept.jpg?s=612x612&w=0&k=20&c=c1Hrxeu7UzcoS-cPPtlYn6b7luFwcPMvSLuZeEICLXo=",
+"https://media.istockphoto.com/id/513303642/photo/abstract-background.jpg?s=612x612&w=0&k=20&c=0G4C1PK4ycSDYZsnT5HGC-D8NNjbdh9aubkWt-9UnhE=",
+"https://media.istockphoto.com/id/1190108809/photo/in-automotive-innovation-facility-automobile-design-engineer-working-on-3d-holographic-model.jpg?s=612x612&w=0&k=20&c=OrmGqOJKKiReg19BZCvly5rbMib53esAR9fpAyd6UP4=",
+"https://media.istockphoto.com/id/1180187740/photo/aerial-view-of-crowd-connected-by-lines.jpg?s=612x612&w=0&k=20&c=QvtOgI2OaeDCDF7NlhKxbrYVNVmariqMXgX_3GH8KT8=",
+"https://media.istockphoto.com/id/1055917194/photo/augmented-reality-project.jpg?s=612x612&w=0&k=20&c=wVFRFAGSBuLkuIX_gKtObndZMbd8P_qkyS_1tRAWVJE=",
+"https://media.istockphoto.com/id/1127069581/photo/medical-technology-concept.jpg?s=612x612&w=0&k=20&c=qp_smilHlWhGzZ-NcftDLugFs_EVCLfX2Z7WCAD1v6A=",
+"https://media.istockphoto.com/id/1165067633/photo/medicine-doctor-touching-electronic-medical-record-on-tablet-dna-digital-healthcare-and.jpg?s=612x612&w=0&k=20&c=q7sGFSIGluWGKUEpcokBqY57nrihAbFCGsi6eJbPx6A=",
+"https://media.istockphoto.com/id/1278741300/photo/lots-of-solar-panel-flowers-generating-sustainable-energy-near-butterflies.jpg?s=612x612&w=0&k=20&c=2JI8g-AQs93YRUM5YRCWkxnmyTT3kdiyST7jaID8Bzo=",
+"https://media.istockphoto.com/id/1351141161/photo/woman-wearing-vr-glasses-s.jpg?s=612x612&w=0&k=20&c=Adb9tR1CIHiPPYZi4fV9OXemmgQFw58xxDzs9OYtlGg=",
+"https://media.istockphoto.com/id/1367696835/photo/hand-showing-laptop-computer-with-cloud-network-computer-connects-to-internet-server-service.jpg?s=612x612&w=0&k=20&c=3uduqYLph26rlJsA8wGWtJCEAHAPtwgdufQMi_x0M-U=",
+"https://images.pexels.com/photos/9242834/pexels-photo-9242834.jpeg?auto=compress&cs=tinysrgb&w=600",
+"https://images.pexels.com/photos/8294622/pexels-photo-8294622.jpeg?auto=compress&cs=tinysrgb&w=600",
+"https://images.pexels.com/photos/29054364/pexels-photo-29054364/free-photo-of-close-up-of-a-metallic-robot-arm-in-black-and-white.jpeg?auto=compress&cs=tinysrgb&w=600",
+"https://images.pexels.com/photos/12334692/pexels-photo-12334692.jpeg?auto=compress&cs=tinysrgb&w=600",
+"https://images.pexels.com/photos/15888223/pexels-photo-15888223/free-photo-of-men-in-protective-uniform-welding-with-robot-in-workshop.jpeg?auto=compress&cs=tinysrgb&w=600",
+"https://images.pexels.com/photos/27978779/pexels-photo-27978779/free-photo-of-a-boy-is-smiling-while-holding-a-sparkler.jpeg?auto=compress&cs=tinysrgb&w=600",
+"https://images.pexels.com/photos/4631059/pexels-photo-4631059.jpeg?auto=compress&cs=tinysrgb&w=600",
+"https://images.pexels.com/photos/31971483/pexels-photo-31971483/free-photo-of-cosplay-samurai-warrior-in-futuristic-armor-at-night.jpeg?auto=compress&cs=tinysrgb&w=600",
+"https://images.pexels.com/photos/7869034/pexels-photo-7869034.jpeg?auto=compress&cs=tinysrgb&w=600",
+"https://images.pexels.com/photos/8438918/pexels-photo-8438918.jpeg?auto=compress&cs=tinysrgb&w=600",
+"https://images.pexels.com/photos/60130/pexels-photo-60130.jpeg?auto=compress&cs=tinysrgb&w=600",
+"https://images.pexels.com/photos/6154316/pexels-photo-6154316.jpeg?auto=compress&cs=tinysrgb&w=600",
+"https://images.pexels.com/photos/9026735/pexels-photo-9026735.jpeg?auto=compress&cs=tinysrgb&w=600"
+        ];
+
+        // Function to create pins from data
+        function createPinsGrid() {
+            const grid = document.getElementById('pinterest-grid');
+            
+            pinsData.forEach((imageUrl, index) => {
+                // Create pin container
+                const pinElement = document.createElement('div');
+                pinElement.className = 'pin';
+                pinElement.dataset.id = index + 1;
+                
+                // Create image container
+                const imageContainer = document.createElement('div');
+                imageContainer.style.position = 'relative';
+                
+                // Create image
+                const image = document.createElement('img');
+                image.className = 'pin-image';
+                image.src = imageUrl;
+                image.alt = 'Pin image';
+                
+                // Create overlay
+                const overlay = document.createElement('div');
+                overlay.className = 'pin-overlay';
+                
+                // Create actions div
+                const actions = document.createElement('div');
+                actions.className = 'pin-actions';
+                
+                // Create like button
+                const likeBtn = document.createElement('button');
+                likeBtn.className = 'pin-btn like-btn';
+                likeBtn.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                `;
+                
+                // Create save button
+                const saveBtn = document.createElement('button');
+                saveBtn.className = 'pin-btn save-btn';
+                saveBtn.textContent = 'Save';
+                
+                // Append buttons to actions
+                actions.appendChild(likeBtn);
+                actions.appendChild(saveBtn);
+                
+                // Append image, overlay, and actions to container
+                imageContainer.appendChild(image);
+                imageContainer.appendChild(overlay);
+                imageContainer.appendChild(actions);
+                
+                // Append image container to pin
+                pinElement.appendChild(imageContainer);
+                
+                // Append pin to grid
+                grid.appendChild(pinElement);
+                
+                // Add event listeners
+                likeBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    toggleLike(this, index + 1);
+                });
+                
+                saveBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    toggleSave(this, { id: index + 1, imageUrl: imageUrl });
+                });
+            });
+        }
+
+        // Function to toggle like state
+        function toggleLike(button, pinId) {
+            button.classList.toggle('active');
+            
+            if (button.classList.contains('active')) {
+                button.classList.add('animating');
+                setTimeout(() => {
+                    button.classList.remove('animating');
+                }, 500);
+            }
+        }
+
+        // Function to toggle save state and save to localStorage
+        function toggleSave(button, pin) {
+            button.classList.toggle('saved');
+            
+            if (button.classList.contains('saved')) {
+                button.textContent = 'Saved';
+                savePinToFavorites(pin);
+                showToast('Item saved to favourites');
+            } else {
+                button.textContent = 'Save';
+                removePinFromFavorites(pin.id);
+                showToast('Item removed from favourites');
+            }
+        }
+
+        // Function to save pin to localStorage
+        function savePinToFavorites(pin) {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            
+            // Check if pin already exists in favorites
+            const exists = favorites.some(fav => fav.id === pin.id);
+            
+            if (!exists) {
+                favorites.push(pin);
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+            }
+        }
+
+        // Function to remove pin from localStorage
+        function removePinFromFavorites(pinId) {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            favorites = favorites.filter(pin => pin.id !== pinId);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+
+        // Function to show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // Check for saved pins on page load
+        function checkSavedPins() {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            
+            if (favorites.length > 0) {
+                const pins = document.querySelectorAll('.pin');
+                
+                pins.forEach(pin => {
+                    const pinId = parseInt(pin.dataset.id);
+                    const isSaved = favorites.some(fav => fav.id === pinId);
+                    
+                    if (isSaved) {
+                        const saveBtn = pin.querySelector('.save-btn');
+                        saveBtn.classList.add('saved');
+                        saveBtn.textContent = 'Saved';
+                    }
+                });
+            }
+        }
+
+        // Initialize the grid
+        document.addEventListener('DOMContentLoaded', () => {
+            createPinsGrid();
+            checkSavedPins();
+        });
+    </script>
+</body>
+</html>

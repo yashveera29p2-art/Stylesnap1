@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHUqEvcE4JeV0xSXMWONg185QZ9IJCuwH0lQ&s">
+    <title>Collections</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            height: 70px;
+            background-color: #000;
+            color: #fff;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-svg {
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover .logo-svg {
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+        }
+
+        .logo-text {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .logo-text::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            z-index: -1;
+        }
+
+        .exclamation {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            flex: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            position: relative;
+            margin: 0 1rem;
+        }
+
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 250px;
+            background-color: rgba(51, 51, 51, 0.85);
+            backdrop-filter: blur(5px);
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+            padding: 0.5rem 0;
+        }
+
+        .profile-dropdown {
+            right: 0;
+            left: auto;
+            width: 200px;
+            background-color: rgba(51, 51, 51, 0.85);
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 0.7rem 1rem;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .profile {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .profile-icon:hover {
+            background-color: #777;
+        }
+        
+        .profile:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Pinterest Grid Styles */
+        .container {
+            max-width: 100%;
+            padding: 40px 0 0 0;
+            margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .masonry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-gap: 16px;
+            grid-auto-flow: dense;
+            padding: 0 16px;
+        }
+
+        .masonry-item {
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s forwards;
+            text-decoration: none;
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .masonry-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        /* Create different heights to mimic Pinterest's masonry layout */
+        .masonry-item:nth-child(1), .masonry-item:nth-child(4) {
+            grid-row: span 2;
+        }
+
+        .masonry-item:nth-child(3), .masonry-item:nth-child(7) {
+            grid-row: span 1;
+        }
+
+        .masonry-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: filter 0.3s ease;
+        }
+
+        .masonry-item:hover img {
+            filter: brightness(0.8);
+        }
+
+        .item-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .item-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .item-description {
+            font-size: 0.9rem;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .masonry-item:hover .item-description {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .masonry-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                padding: 0 8px;
+            }
+            
+            .nav-links {
+                max-width: 500px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .masonry-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                padding: 0 4px;
+                grid-gap: 8px;
+            }
+            
+            .item-title {
+                font-size: 1.1rem;
+            }
+            
+            .navbar {
+                padding: 0 1rem;
+            }
+            
+            .nav-item {
+                margin: 0 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <!-- Logo -->
+    <a href="homehtml.html" class="logo">
+        <div class="logo-container">
+            <!-- Custom SVG Symbol -->
+            <svg class="logo-svg" width="45" height="45" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Outer circle -->
+                <circle cx="50" cy="50" r="40" stroke="white" stroke-width="4" fill="none"/>
+                
+                <!-- Camera lens inner circle -->
+                <circle cx="50" cy="50" r="25" stroke="white" stroke-width="3" fill="rgba(255,255,255,0.1)"/>
+                
+                <!-- Camera flash -->
+                <rect x="35" y="20" width="8" height="8" rx="2" fill="white"/>
+                
+                <!-- Shutter lines -->
+                <path d="M35 50 L50 35 L65 50 L50 65 Z" stroke="white" stroke-width="2" fill="none"/>
+                
+                <!-- Center dot -->
+                <circle cx="50" cy="50" r="4" fill="white"/>
+                
+
+                <path d="M20 30 Q25 25 30 30" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <path d="M70 30 Q75 25 80 30" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <path d="M20 70 Q25 75 30 70" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <path d="M70 70 Q75 75 80 70" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            
+            <span class="logo-text">STYLE<span class="exclamation">!</span>SNAP</span>
+        </div>
+    </a>
+
+    <!-- Nav Links -->
+    <ul class="nav-links">
+        <li class="nav-item">
+            <a href="homehtml.html" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item">
+            <a href="collectionshtml.html" class="nav-link">Collections</a>
+            <div class="dropdown">
+                <a href="trending1.html" class="dropdown-item">Trending</a>
+                    <a href="food1.html" class="dropdown-item">Food & Recipes</a>
+                    <a href="fashion1.html" class="dropdown-item">Fashion & Style</a>
+                    <a href="homedecor1.html" class="dropdown-item">Home Decor & Interior Design</a>
+                    <a href="art1.html" class="dropdown-item">Art & Creativity</a>
+                    <a href="technology1.html" class="dropdown-item">Technology & Gadgets</a>
+                    <a href="fitness1.html" class="dropdown-item">Fitness & Wellness</a>
+                    <a href="diy1.html" class="dropdown-item">DIY & Crafts</a>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a href="explorehtml.html" class="nav-link">Explore</a>
+            <div class="dropdown">
+                <a href="africa.html" class="dropdown-item">Africa</a>
+                    <a href="asia.html" class="dropdown-item">Asia</a>
+                    <a href="europe.html" class="dropdown-item">Europe</a>
+                    <a href="north.html" class="dropdown-item">North America</a>
+                    <a href="south.html" class="dropdown-item">South America</a>
+                    <a href="australia.html" class="dropdown-item">Australia & Oceania</a>
+                    <a href="antarctica.html" class="dropdown-item">Antarctica</a>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a href="favourites.html" class="nav-link">Favourites</a>
+        </li>
+    </ul>
+
+    <!-- Profile -->
+    <div class="profile">
+        <div class="profile-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+        </div>
+        <div class="dropdown profile-dropdown">
+            <a href="profile.html" class="dropdown-item">Profile</a>
+                
+                <a href="logout.html" class="dropdown-item">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <h1>Collections</h1>
+    <div class="masonry-grid">
+            <!-- Trending -->
+            <a href="trending1.html" class="masonry-item">
+                <img src="https://i.pinimg.com/474x/c7/60/78/c760780eeadb7ea7fd2ef552cc8716f4.jpg">
+                <div class="item-content">
+                    <h3 class="item-title">Trending</h3>
+                    <p class="item-description">Discover what's popular right now across all categories</p>
+                </div>
+            </a>
+
+            <!-- Food & Recipes -->
+            <a href="food1.html" class="masonry-item">
+                <img src="https://insanelygoodrecipes.com/wp-content/uploads/2023/01/Creamy-and-Saucy-Chicken-Alfredo-Pasta-800x530.jpg" alt="Food & Recipes Collection">
+                <div class="item-content">
+                    <h3 class="item-title">Food & Recipes</h3>
+                    <p class="item-description">Delicious meals and cooking inspiration</p>
+                </div>
+            </a>
+
+            <!-- Fashion & Style -->
+            <a href="fashion1.html" class="masonry-item">
+                <img src="https://i.pinimg.com/564x/2b/67/44/2b674434f9c9b16d8cdfbb781199d134.jpg" alt="Fashion & Style Collection">
+                <div class="item-content">
+                    <h3 class="item-title">Fashion & Style</h3>
+                    <p class="item-description">The latest trends and timeless classics</p>
+                </div>
+            </a>
+
+            <!-- Home Decor & Interior Design -->
+            <a href="homedecor1.html" class="masonry-item">
+                <img src="https://i.pinimg.com/736x/79/a7/fe/79a7fe11d628b85eb6a58f5bcec5b071.jpg" alt="Home Decor & Interior Design Collection">
+                <div class="item-content">
+                    <h3 class="item-title">Home Decor & Interior Design</h3>
+                    <p class="item-description">Beautiful spaces and creative design ideas</p>
+                </div>
+            </a>
+
+            <!-- Art & Creativity -->
+            <a href="art1.html" class="masonry-item">
+                <img src="https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=612x612&w=0&k=20&c=l15OdMWjgCKycMMShP8UK94ELVlEGvt7GmB_esHWPYE=" alt="Art & Creativity Collection">
+                <div class="item-content">
+                    <h3 class="item-title">Art & Creativity</h3>
+                    <p class="item-description">Inspiring artworks and creative projects</p>
+                </div>
+            </a>
+
+            <!-- Technology & Gadgets -->
+            <a href="technology1.html" class="masonry-item">
+                <img src="https://www.apple.com/newsroom/videos/media/rotation/posters/Apple-WWDC23-Vision-Pro-rotation-230605.jpg.large_2x.jpg" alt="Technology & Gadgets Collection">
+                <div class="item-content">
+                    <h3 class="item-title">Technology & Gadgets</h3>
+                    <p class="item-description">Cutting-edge tech and smart innovations</p>
+                </div>
+            </a>
+
+            <!-- Fitness & Wellness -->
+            <a href="fitness1.html" class="masonry-item">
+                <img src="https://www.sait.ca/assets/image/programs/credit-programs-600x400/pr-fitness-and-wellness-management-600x400.jpg" alt="Fitness & Wellness Collection">
+                <div class="item-content">
+                    <h3 class="item-title">Fitness & Wellness</h3>
+                    <p class="item-description">Healthy living and workout inspiration</p>
+                </div>
+            </a>
+
+            <!-- DIY & Crafts -->
+            <a href="diy1.html" class="masonry-item">
+                <img src="https://www.modern-glam.com/wp-content/uploads/2019/05/Paper-Plate-Dream-Catchers.jpg" alt="DIY & Crafts Collection">
+                <div class="item-content">
+                    <h3 class="item-title">DIY & Crafts</h3>
+                    <p class="item-description">Creative projects and handmade inspiration</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Logo redirect
+        document.querySelector('.logo').addEventListener('click', function() {
+            window.location.href = 'index.html'; // or '/' for home page
+        });
+        
+        // Add animation to make the grid feel more dynamic
+        document.addEventListener('DOMContentLoaded', function() {
+            const items = document.querySelectorAll('.masonry-item');
+            
+            // Add staggered animation on page load
+            items.forEach((item, index) => {
+                item.style.animationDelay = ⁠ ${100 * index}ms ⁠;
+            });
+            
+            // Dropdown active state for collections
+            const collectionsLinks = document.querySelectorAll('.nav-link');
+            collectionsLinks.forEach(link => {
+                if (link.textContent === 'Collections') {
+                    link.classList.add('active');
+                    link.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                }
+            });
+            
+            // Adjust grid layout to fill the screen width
+            function adjustLayout() {
+                const screenWidth = window.innerWidth;
+                const gridContainer = document.querySelector('.masonry-grid');
+                const containerPadding = parseInt(getComputedStyle(gridContainer).paddingLeft) * 2;
+                const gap = parseInt(getComputedStyle(gridContainer).gridGap);
+                
+                // Calculate optimal item width
+                let itemsPerRow;
+                if (screenWidth > 1600) itemsPerRow = 6;
+                else if (screenWidth > 1200) itemsPerRow = 5;
+                else if (screenWidth > 900) itemsPerRow = 4;
+                else if (screenWidth > 600) itemsPerRow = 3;
+                else if (screenWidth > 480) itemsPerRow = 2;
+                else itemsPerRow = 1;
+                
+                const availableWidth = screenWidth - containerPadding;
+                const itemWidth = (availableWidth - (gap * (itemsPerRow - 1))) / itemsPerRow;
+                
+                gridContainer.style.gridTemplateColumns = ⁠ repeat(auto-fill, minmax(${Math.floor(itemWidth)}px, 1fr)) ⁠;
+            }
+            
+            // Run on load and resize
+            adjustLayout();
+            window.addEventListener('resize', adjustLayout);
+        });
+    </script>
+</body>
+</html>

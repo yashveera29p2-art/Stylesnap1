@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHUqEvcE4JeV0xSXMWONg185QZ9IJCuwH0lQ&s">
+    <title>Explore</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        /* Updated Navbar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            height: 70px;
+            background-color: #000;
+            color: #fff;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-svg {
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover .logo-svg {
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+        }
+
+        .logo-text {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .logo-text::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            z-index: -1;
+        }
+
+        .exclamation {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            flex: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            position: relative;
+            margin: 0 1rem;
+        }
+
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 250px;
+            background-color: rgba(51, 51, 51, 0.85);
+            backdrop-filter: blur(5px);
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+            padding: 0.5rem 0;
+        }
+
+        .profile-dropdown {
+            right: 0;
+            left: auto;
+            width: 200px;
+            background-color: rgba(51, 51, 51, 0.85);
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 0.7rem 1rem;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .profile {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .profile-icon:hover {
+            background-color: #777;
+        }
+        
+        .profile:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* World Map Container */
+        .map-container {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            background-color: #e6f7ff; /* Light blue background for oceans */
+            overflow: hidden;
+        }
+
+        .world-map {
+            width: 100%;
+            height: auto;
+            min-height: calc(100vh - 70px); /* Full height minus navbar */
+            display: block;
+        }
+
+        .continent {
+            fill: #3498db;
+            stroke: #fff;
+            stroke-width: 2;
+            transition: fill 0.3s ease, transform 0.3s ease;
+            cursor: pointer;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+        }
+
+        .continent:hover {
+            fill: #2980b9;
+            transform: translateY(-3px);
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+        }
+
+        /* Custom colors for each continent */
+        .north-america {
+            fill: #e74c3c;
+        }
+        
+        .south-america {
+            fill: #f39c12;
+        }
+        
+        .europe {
+            fill: #3498db;
+        }
+        
+        .africa {
+            fill: #27ae60;
+        }
+        
+        .asia {
+            fill: #9b59b6;
+        }
+        
+        .oceania {
+            fill: #1abc9c;
+        }
+        
+        .antarctica {
+            fill: #ecf0f1;
+        }
+
+        /* Continent Labels */
+        .continent-label {
+            font-size: 16px;
+            font-weight: bold;
+            fill: #333;
+            pointer-events: none;
+            text-anchor: middle;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .continent-label {
+                font-size: 10px;
+            }
+        }
+
+        /* Info Box styles */
+        .info-box {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+        }
+
+        .info-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .info-text {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Updated Navbar from second document -->
+    <nav class="navbar">
+        <!-- Logo -->
+        <a href="homehtml.html" class="logo">
+            <div class="logo-container">
+                <!-- Custom SVG Symbol -->
+                <svg class="logo-svg" width="45" height="45" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Outer circle -->
+                    <circle cx="50" cy="50" r="40" stroke="white" stroke-width="4" fill="none"/>
+                    
+                    <!-- Camera lens inner circle -->
+                    <circle cx="50" cy="50" r="25" stroke="white" stroke-width="3" fill="rgba(255,255,255,0.1)"/>
+                    
+                    <!-- Camera flash -->
+                    <rect x="35" y="20" width="8" height="8" rx="2" fill="white"/>
+                    
+                    <!-- Shutter lines -->
+                    <path d="M35 50 L50 35 L65 50 L50 65 Z" stroke="white" stroke-width="2" fill="none"/>
+                    
+                    <!-- Center dot -->
+                    <circle cx="50" cy="50" r="4" fill="white"/>
+                    
+    
+                    <path d="M20 30 Q25 25 30 30" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M70 30 Q75 25 80 30" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M20 70 Q25 75 30 70" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M70 70 Q75 75 80 70" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                
+                <span class="logo-text">STYLE<span class="exclamation">!</span>SNAP</span>
+            </div>
+        </a>
+
+        <!-- Nav Links -->
+        <ul class="nav-links">
+            <li class="nav-item">
+                <a href="homehtml.html" class="nav-link">Home</a>
+            </li>
+            <li class="nav-item">
+                <a href="collectionshtml.html" class="nav-link">Collections</a>
+                <div class="dropdown">
+                    <a href="trending1.html" class="dropdown-item">Trending</a>
+                    <a href="food1.html" class="dropdown-item">Food & Recipes</a>
+                    <a href="fashion1.html" class="dropdown-item">Fashion & Style</a>
+                    <a href="homedecor1.html" class="dropdown-item">Home Decor & Interior Design</a>
+                    <a href="art1.html" class="dropdown-item">Art & Creativity</a>
+                    <a href="technology1.html" class="dropdown-item">Technology & Gadgets</a>
+                    <a href="fitness1.html" class="dropdown-item">Fitness & Wellness</a>
+                    <a href="diy1.html" class="dropdown-item">DIY & Crafts</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="explorehtml.html" class="nav-link">Explore</a>
+                <div class="dropdown">
+                    <a href="africa.html" class="dropdown-item">Africa</a>
+                    <a href="asia.html" class="dropdown-item">Asia</a>
+                    <a href="europe.html" class="dropdown-item">Europe</a>
+                    <a href="north.html" class="dropdown-item">North America</a>
+                    <a href="south.html" class="dropdown-item">South America</a>
+                    <a href="australia.html" class="dropdown-item">Australia & Oceania</a>
+                    <a href="antarctica.html" class="dropdown-item">Antarctica</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="favourites.html" class="nav-link">Favourites</a>
+            </li>
+        </ul>
+
+        <!-- Profile -->
+        <div class="profile">
+            <div class="profile-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+            <div class="dropdown profile-dropdown">
+                <a href="profile.html" class="dropdown-item">Profile</a>
+                
+                <a href="logout.html" class="dropdown-item">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- World Map Section -->
+    <div class="map-container">
+        <svg class="world-map" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+            <!-- Ocean Background -->
+            <rect x="0" y="0" width="1000" height="500" fill="#cae8ff" />
+            
+            <!-- Grid Lines (Optional) -->
+            <g class="grid-lines" stroke="#a8d5ff" stroke-width="0.5">
+                <!-- Horizontal lines -->
+                <line x1="0" y1="50" x2="1000" y2="50" />
+                <line x1="0" y1="100" x2="1000" y2="100" />
+                <line x1="0" y1="150" x2="1000" y2="150" />
+                <line x1="0" y1="200" x2="1000" y2="200" />
+                <line x1="0" y1="250" x2="1000" y2="250" />
+                <line x1="0" y1="300" x2="1000" y2="300" />
+                <line x1="0" y1="350" x2="1000" y2="350" />
+                <line x1="0" y1="400" x2="1000" y2="400" />
+                <line x1="0" y1="450" x2="1000" y2="450" />
+                
+                <!-- Vertical lines -->
+                <line x1="100" y1="0" x2="100" y2="500" />
+                <line x1="200" y1="0" x2="200" y2="500" />
+                <line x1="300" y1="0" x2="300" y2="500" />
+                <line x1="400" y1="0" x2="400" y2="500" />
+                <line x1="500" y1="0" x2="500" y2="500" />
+                <line x1="600" y1="0" x2="600" y2="500" />
+                <line x1="700" y1="0" x2="700" y2="500" />
+                <line x1="800" y1="0" x2="800" y2="500" />
+                <line x1="900" y1="0" x2="900" y2="500" />
+            </g>
+            <!-- North America -->
+            <a href="north.html">
+                <path class="continent north-america" d="M170,90 L175,85 L180,80 L190,75 L200,70 L210,65 L215,60 L225,58 L235,55 L245,53 L255,52 L265,53 L270,55 L275,60 L280,65 L285,70 L290,75 L295,80 L300,85 L305,90 L310,92 L315,88 L320,85 L325,82 L330,78 L335,75 L340,76 L345,78 L350,80 L355,82 L356,86 L355,90 L350,94 L345,98 L342,102 L340,106 L338,110 L335,114 L332,118 L330,122 L325,126 L320,130 L315,134 L312,138 L310,142 L308,146 L305,150 L302,154 L300,158 L295,162 L290,166 L287,170 L285,174 L282,178 L280,182 L277,186 L275,190 L272,194 L270,198 L267,202 L265,206 L262,210 L260,214 L258,218 L255,222 L253,226 L251,230 L248,234 L245,238 L242,242 L240,246 L235,248 L230,250 L225,252 L220,253 L215,252 L210,249 L205,246 L200,243 L195,240 L190,237 L185,234 L180,230 L177,226 L175,222 L173,218 L171,214 L169,210 L167,206 L165,202 L163,198 L161,194 L159,190 L157,186 L156,182 L155,178 L154,174 L153,170 L152,166 L151,162 L150,158 L149,154 L148,150 L147,146 L146,142 L148,138 L150,134 L153,130 L155,126 L158,122 L160,118 L162,114 L164,110 L166,106 L168,102 L170,98 L172,94 L170,90 Z">
+                </path>
+                <text class="continent-label" x="220" y="160">North America</text>
+            </a>
+
+            <!-- South America -->
+            <a href="south.html">
+                <path class="continent south-america" d="M245,250 L250,255 L255,260 L260,265 L265,270 L270,275 L273,280 L276,285 L279,290 L282,295 L285,300 L288,305 L290,310 L292,315 L294,320 L296,325 L298,330 L300,335 L302,340 L304,345 L306,350 L308,355 L310,360 L308,365 L305,370 L300,375 L295,380 L290,385 L285,390 L280,393 L275,396 L270,399 L265,402 L260,405 L255,408 L250,410 L245,412 L240,413 L235,414 L230,413 L225,412 L220,410 L215,408 L210,405 L208,400 L206,395 L205,390 L204,385 L203,380 L204,375 L206,370 L208,365 L210,360 L212,355 L214,350 L216,345 L218,340 L220,335 L222,330 L224,325 L226,320 L228,315 L230,310 L232,305 L234,300 L236,295 L238,290 L240,285 L242,280 L244,275 L246,270 L248,265 L247,260 L245,255 L245,250 Z">
+                </path>
+                <text class="continent-label" x="250" y="350">South America</text>
+            </a>
+
+            <!-- Europe -->
+            <a href="europe.html">
+                <path class="continent europe" d="M480,90 L485,85 L490,82 L495,80 L500,78 L505,76 L510,74 L515,72 L520,70 L525,68 L530,70 L535,72 L540,74 L545,76 L550,78 L555,80 L560,82 L565,84 L570,86 L573,90 L576,94 L579,98 L580,102 L581,106 L582,110 L581,114 L580,118 L579,122 L577,126 L575,130 L572,134 L569,138 L566,142 L563,146 L560,150 L557,154 L554,158 L550,160 L546,162 L542,164 L538,166 L534,168 L530,170 L526,172 L522,174 L518,176 L514,178 L510,180 L506,182 L502,184 L498,186 L494,184 L490,182 L486,180 L484,176 L482,172 L480,168 L478,164 L476,160 L474,156 L472,152 L470,148 L472,144 L474,140 L476,136 L478,132 L480,128 L482,124 L484,120 L486,116 L488,112 L490,108 L488,104 L486,100 L484,96 L482,92 L480,90 Z">
+                </path>
+                <text class="continent-label" x="520" y="130">Europe</text>
+            </a>
+
+            <!-- Africa -->
+            <a href="africa.html">
+                <path class="continent africa" d="M500,180 L505,185 L510,190 L515,195 L520,200 L525,205 L530,210 L535,215 L540,220 L545,225 L550,230 L555,235 L560,240 L565,245 L570,250 L575,255 L580,260 L585,265 L590,270 L595,275 L600,280 L602,285 L604,290 L606,295 L608,300 L610,305 L608,310 L606,315 L604,320 L602,325 L600,330 L598,335 L596,340 L594,345 L592,350 L590,353 L585,356 L580,359 L575,362 L570,365 L565,368 L560,370 L555,372 L550,374 L545,376 L540,378 L535,380 L530,378 L525,376 L520,374 L515,372 L510,370 L505,368 L500,366 L495,364 L490,360 L488,355 L486,350 L484,345 L482,340 L480,335 L478,330 L476,325 L475,320 L474,315 L473,310 L472,305 L471,300 L470,295 L469,290 L468,285 L467,280 L466,275 L467,270 L468,265 L469,260 L470,255 L471,250 L472,245 L473,240 L474,235 L475,230 L478,225 L480,220 L483,215 L486,210 L489,205 L492,200 L495,195 L498,190 L499,185 L500,180 Z">
+                </path>
+                <text class="continent-label" x="540" y="280">Africa</text>
+            </a>
+
+            <!-- Asia -->
+            <a href="asia.html">
+                <path class="continent asia" d="M580,80 L590,75 L600,70 L610,68 L620,66 L630,64 L640,62 L650,60 L660,58 L670,57 L680,56 L690,55 L700,56 L710,57 L720,58 L730,60 L740,62 L750,64 L760,66 L770,68 L780,70 L790,73 L800,76 L810,80 L815,85 L820,90 L825,95 L830,100 L835,105 L840,110 L845,115 L847,120 L849,125 L850,130 L852,135 L853,140 L854,145 L855,150 L854,155 L853,160 L852,165 L850,170 L848,175 L846,180 L844,185 L842,190 L840,194 L835,198 L830,202 L825,206 L820,210 L815,213 L810,216 L805,219 L800,222 L795,225 L790,227 L785,229 L780,231 L775,233 L770,235 L765,237 L760,239 L755,240 L750,241 L745,242 L740,243 L735,244 L730,245 L725,244 L720,243 L715,242 L710,241 L705,240 L700,239 L695,238 L690,237 L685,235 L680,233 L675,231 L670,229 L665,227 L660,225 L655,223 L650,220 L645,218 L640,215 L635,212 L630,209 L625,206 L620,203 L615,200 L610,197 L605,194 L600,190 L597,185 L594,180 L591,175 L590,170 L588,165 L586,160 L584,155 L582,150 L580,145 L578,140 L576,135 L574,130 L572,125 L570,120 L572,115 L574,110 L576,105 L578,100 L580,95 L582,90 L581,85 L580,80 Z">
+                </path>
+                <text class="continent-label" x="700" y="150">Asia</text>
+            </a>
+
+            <!-- Australia/Oceania -->
+            <a href="australia.html">
+                <path class="continent oceania" d="M780,280 L785,275 L790,270 L795,268 L800,266 L805,264 L810,262 L815,260 L820,258 L825,260 L830,262 L835,264 L840,266 L845,268 L850,270 L855,273 L860,276 L865,280 L868,285 L870,290 L872,295 L874,300 L876,305 L878,310 L879,315 L880,320 L879,325 L878,330 L876,335 L874,340 L872,345 L870,350 L868,355 L865,358 L860,361 L855,364 L850,367 L845,370 L840,373 L835,375 L830,377 L825,379 L820,380 L815,379 L810,378 L805,377 L800,375 L795,373 L790,370 L785,367 L780,364 L777,360 L775,355 L773,350 L772,345 L771,340 L770,335 L771,330 L772,325 L773,320 L774,315 L775,310 L776,305 L777,300 L778,295 L779,290 L780,285 L780,280 Z">
+                </path>
+                <text class="continent-label" x="825" y="320">Australia & Oceania</text>
+            </a>
+
+            <!-- Antarctica -->
+            <a href="antarctica.html">
+                <path class="continent antarctica" d="M280,450 L300,445 L320,442 L340,440 L360,438 L380,437 L400,436 L420,435 L440,434 L460,433 L480,432 L500,431 L520,432 L540,433 L560,434 L580,435 L600,436 L620,437 L640,438 L660,440 L680,442 L700,445 L720,448 L700,452 L680,456 L660,460 L640,463 L620,466 L600,468 L580,470 L560,471 L540,472 L520,473 L500,474 L480,473 L460,472 L440,471 L420,470 L400,468 L380,466 L360,463 L340,460 L320,456 L300,452 L280,450 Z">
+                </path>
+                <text class="continent-label" x="500" y="455">Antarctica</text>
+            </a>
+        </svg>
+
+        <!-- Info Box -->
+        <div class="info-box">
+            <div class="info-title">Explore the World</div>
+            <div class="info-text">Click on any continent to discover collections from that region.</div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced interactive functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const continents = document.querySelectorAll('.continent');
+            const infoTitle = document.querySelector('.info-title');
+            const infoText = document.querySelector('.info-text');
+
+            // Content for each continent
+            const continentInfo = {
+                'north-america': {
+                    title: 'North America',
+                    text: 'Discover trending styles, modern architecture, and innovative designs from across North America.'
+                },
+                'south-america': {
+                    title: 'South America',
+                    text: 'Explore vibrant colors, rich cultural heritage, and unique artistic expressions from South America.'
+                },
+                'europe': {
+                    title: 'Europe',
+                    text: 'Experience classical elegance, historical architecture, and contemporary European trends.'
+                },
+                'africa': {
+                    title: 'Africa',
+                    text: 'Immerse yourself in bold patterns, natural materials, and the diverse artistic traditions of Africa.'
+                },
+                'asia': {
+                    title: 'Asia',
+                    text: 'Discover minimalist aesthetics, intricate details, and timeless traditions from across Asia.'
+                },
+                'oceania': {
+                    title: 'Australia & Oceania',
+                    text: 'Explore coastal living, nature-inspired designs, and indigenous art forms from Australia and Oceania.'
+                },
+                'antarctica': {
+                    title: 'Antarctica',
+                    text: 'Discover the pristine beauty, scientific research, and environmental conservation efforts in Antarctica.'
+                }
+            };
+
+            // Update info box on hover
+            continents.forEach(continent => {
+                continent.addEventListener('mouseover', function() {
+                    // Get continent class
+                    const classes = this.classList;
+                    let continentClass = '';
+                    
+                    for (const cls of classes) {
+                        if (continentInfo[cls]) {
+                            continentClass = cls;
+                            break;
+                        }
+                    }
+                    
+                    if (continentClass && continentInfo[continentClass]) {
+                        infoTitle.textContent = continentInfo[continentClass].title;
+                        infoText.textContent = continentInfo[continentClass].text;
+                        
+                        // Add a subtle highlight effect
+                        this.style.strokeWidth = '3';
+                    }
+                });
+                
+                continent.addEventListener('mouseout', function() {
+                    // Reset stroke width
+                    this.style.strokeWidth = '2';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

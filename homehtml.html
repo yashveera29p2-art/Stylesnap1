@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHUqEvcE4JeV0xSXMWONg185QZ9IJCuwH0lQ&s">
+    <title>Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            height: 70px;
+            background-color: #000;
+            color: #fff;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-svg {
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover .logo-svg {
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+        }
+
+        .logo-text {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .logo-text::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            z-index: -1;
+        }
+
+        .exclamation {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            flex: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            position: relative;
+            margin: 0 1rem;
+        }
+
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 250px;
+            background-color: rgba(51, 51, 51, 0.85);
+            backdrop-filter: blur(5px);
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+            padding: 0.5rem 0;
+        }
+
+        .profile-dropdown {
+            right: 0;
+            left: auto;
+            width: 200px;
+            background-color: rgba(51, 51, 51, 0.85);
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 0.7rem 1rem;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .profile {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .profile-icon:hover {
+            background-color: #777;
+        }
+        
+        .profile:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Main content area */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .bottom-section {
+            grid-column: 1 / -1;
+            margin-top: 20px;
+        }
+
+        /* Top left - Sliding image */
+        .image-slider {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease, transform 1.5s ease;
+            transform: translateX(-100%);
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Top right - Changing text */
+        .changing-text-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 400px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .static-text {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #000;
+        }
+
+        .changing-text {
+            font-size: 5rem;
+            font-weight: 800;
+            color: #555;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .word {
+            position: absolute;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .word.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Bottom image galleries */
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            width: 100%;
+            padding: 20px 0;
+        }
+
+        .gallery-item {
+            aspect-ratio: 1/1;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.8s ease, opacity 0.8s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        .gallery-item.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .gallery-item:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px) scale(1.03);
+            z-index: 10;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Arrow button */
+        .arrow-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #000;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            position: absolute;
+            right: 20px;
+            bottom: 50%;
+            transform: translateY(50%);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .arrow-btn:hover {
+            background-color: #333;
+            transform: translateY(50%) scale(1.1);
+        }
+
+        /* Responsive styling */
+        @media (max-width: 900px) {
+            .navbar {
+                padding: 0 1rem;
+            }
+
+            .nav-links {
+                max-width: none;
+            }
+
+            .nav-item {
+                margin: 0 0.5rem;
+            }
+
+            .nav-link {
+                padding: 0.5rem 0.7rem;
+                font-size: 0.9rem;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .changing-text {
+                font-size: 3.5rem;
+            }
+            
+            .gallery-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .static-text {
+                font-size: 2.5rem;
+            }
+
+            .changing-text {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <!-- Logo -->
+        <a href="homehtml.html" class="logo">
+            <div class="logo-container">
+                <!-- Custom SVG Symbol -->
+                <svg class="logo-svg" width="45" height="45" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Outer circle -->
+                    <circle cx="50" cy="50" r="40" stroke="white" stroke-width="4" fill="none"/>
+                    
+                    <!-- Camera lens inner circle -->
+                    <circle cx="50" cy="50" r="25" stroke="white" stroke-width="3" fill="rgba(255,255,255,0.1)"/>
+                    
+                    <!-- Camera flash -->
+                    <rect x="35" y="20" width="8" height="8" rx="2" fill="white"/>
+                    
+                    <!-- Shutter lines -->
+                    <path d="M35 50 L50 35 L65 50 L50 65 Z" stroke="white" stroke-width="2" fill="none"/>
+                    
+                    <!-- Center dot -->
+                    <circle cx="50" cy="50" r="4" fill="white"/>
+                    
+    
+                    <path d="M20 30 Q25 25 30 30" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M70 30 Q75 25 80 30" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M20 70 Q25 75 30 70" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M70 70 Q75 75 80 70" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                
+                <span class="logo-text">STYLE<span class="exclamation">!</span>SNAP</span>
+            </div>
+        </a>
+
+        <!-- Nav Links -->
+        <ul class="nav-links">
+            <li class="nav-item">
+                <a href="homehtml.html" class="nav-link">Home</a>
+            </li>
+            <li class="nav-item">
+                <a href="collectionshtml.html" class="nav-link">Collections</a>
+                <div class="dropdown">
+                    <a href="trending1.html" class="dropdown-item">Trending</a>
+                    <a href="food1.html" class="dropdown-item">Food & Recipes</a>
+                    <a href="fashion1.html" class="dropdown-item">Fashion & Style</a>
+                    <a href="homedecor1.html" class="dropdown-item">Home Decor & Interior Design</a>
+                    <a href="art1.html" class="dropdown-item">Art & Creativity</a>
+                    <a href="technology1.html" class="dropdown-item">Technology & Gadgets</a>
+                    <a href="fitness1.html" class="dropdown-item">Fitness & Wellness</a>
+                    <a href="diy1.html" class="dropdown-item">DIY & Crafts</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="explorehtml.html" class="nav-link">Explore</a>
+                <div class="dropdown">
+                    <a href="africa.html" class="dropdown-item">Africa</a>
+                    <a href="asia.html" class="dropdown-item">Asia</a>
+                    <a href="europe.html" class="dropdown-item">Europe</a>
+                    <a href="north.html" class="dropdown-item">North America</a>
+                    <a href="south.html" class="dropdown-item">South America</a>
+                    <a href="australia.html" class="dropdown-item">Australia & Oceania</a>
+                    <a href="antarctica.html" class="dropdown-item">Antarctica</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="favourites.html" class="nav-link">Favourites</a>
+            </li>
+        </ul>
+
+        <!-- Profile -->
+        <div class="profile">
+            <div class="profile-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+            <div class="dropdown profile-dropdown">
+                <a href="profile.html" class="dropdown-item">Profile</a>
+                
+                <a href="logout.html" class="dropdown-item">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Left - Image Slider -->
+        <div class="image-slider">
+            <div class="slide active">
+                <img src="https://wallpapercave.com/wp/wp4815672.jpg" alt="Creative art">
+            </div>
+            <div class="slide">
+                <img src="https://c7c8edde.rocketcdn.me/wp-content/uploads/craft-supplies-for-kids.jpg" alt="Craft supplies">
+            </div>
+            <div class="slide">
+                <img src="https://amritsruae.com/blog/wp-content/uploads/2021/08/top-indian-food-in-dubai.jpeg" alt="Food and recipes">
+            </div>
+            <div class="slide">
+                <img src="https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?cs=srgb&dl=pexels-fotoaibe-1571460.jpg&fm=jpg" alt="Interior design">
+            </div>
+        </div>
+
+        <!-- Top Right - Changing Text -->
+        <div class="changing-text-container">
+            <h2 class="static-text">Get Your Next</h2>
+            <div class="changing-text">
+                <span class="word active">IDEA</span>
+                <span class="word">INSPO</span>
+                <span class="word">TREND</span>
+                <span class="word">STYLE</span>
+            </div>
+            
+        </div>
+
+        <!-- Bottom Section - Gallery Grid -->
+        <div class="bottom-section">
+            <div class="gallery-container">
+                <div class="gallery-item">
+                    <img src="https://media.istockphoto.com/id/115865739/photo/hand-embroidered-flower-motif.jpg?s=612x612&w=0&k=20&c=4FO9F2HvbIG2INKRKoFWi0u74gX26Rbap17Yjb8BfNA=" alt="Embroidery threads">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://hips.hearstapps.com/hmg-prod/images/how-to-cross-stitch-1518730835.jpg" alt="Cross stitch">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://cdn.exoticindia.com/images/products/original/paintings-2019/ddc157_a03.jpg" alt="Mandala art">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?cs=srgb&dl=pexels-anjana-c-169994-674010.jpg&fm=jpg" alt="Pattern design">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://cdn.loveandlemons.com/wp-content/uploads/2017/01/shakshuka.jpg" alt="Recipe">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://www.thti.edu.tt/wp-content/uploads/rsz_1baker_dusting_flour_stock_photo.jpg" alt="Baking">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://assets.vogue.com/photos/60d4f0ee31f3da1aa8f2b388/master/w_2560%2Cc_limit/Paris%2520Mens%2520SS22%2520day%25203%2520by%2520STYLEDUMONDE%2520Street%2520Style%2520Fashion%2520Photography_95A5612FullRes.jpg" alt="Fashion">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://res.cloudinary.com/sagacity/image/upload/c_crop,h_3744,w_5616,x_0,y_0/c_limit,dpr_auto,f_auto,fl_lossy,q_80,w_1080/shutterstock_710830261_cmnqfw.jpg" alt="Art supplies">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Logo redirect
+        document.querySelector('.logo').addEventListener('click', function() {
+            window.location.href = 'index.html'; // or '/' for home page
+        });
+
+        // Image slider animation
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        // Start the slider
+        setInterval(nextSlide, 3000);
+
+        // Changing text animation
+        const words = document.querySelectorAll('.word');
+        let currentWord = 0;
+
+        function nextWord() {
+            words[currentWord].classList.remove('active');
+            currentWord = (currentWord + 1) % words.length;
+            words[currentWord].classList.add('active');
+        }
+
+        // Start the word change
+        setInterval(nextWord, 2000);
+
+        // Animation for gallery items
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        // Check if an element is in viewport
+        function isInViewport(element) {
+            const rect = element.getBoundingClientRect();
+            return (
+                rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.bottom >= 0
+            );
+        }
+
+        // Show items when they come into view with staggered delay
+        function showItemsInViewport() {
+            galleryItems.forEach((item, index) => {
+                if (isInViewport(item)) {
+                    setTimeout(() => {
+                        item.classList.add('show');
+                    }, 100 * index); // Staggered delay based on index
+                }
+            });
+        }
+
+        // Check on load and scroll
+        window.addEventListener('load', showItemsInViewport);
+        window.addEventListener('scroll', showItemsInViewport);
+
+        // Arrow button interaction
+        document.querySelector('.arrow-btn').addEventListener('click', function() {
+            nextWord();
+        });
+
+        // Add active class to current page
+        const navLinks = document.querySelectorAll('.nav-link');
+        const currentLocation = window.location.href;
+        
+        navLinks.forEach(link => {
+            if (link.href === currentLocation) {
+                link.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
